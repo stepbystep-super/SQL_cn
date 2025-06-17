@@ -49,18 +49,31 @@ COUNT(*) OVER (PARTITION BY some_value) AS value_freq
 | 功能    | 推荐函数                        |   |               |
 | ----- | --------------------------- | - | ------------- |
 | 平均值   | `AVG()`                     |   |               |
-| 拼接    | \`                          |   | `或`CONCAT()\` |
+| 拼接    | 'concatenate'                |   | `或`CONCAT()\` |
 | 类型转换  | `CAST(... AS INTEGER/CHAR)` |   |               |
 | 替换字符  | `REPLACE()`                 |   |               |
 | 字符串截取 | `SUBSTR(col, start, len)`   |   |               |
 | 去掉空格  | `TRIM()`                    |   |               |
 | 向上取整  | `CEIL()`                    |   |               |
+举例说明下拼接/concatenate:
+```sql
+'... ' || col || '...'
+```
+比如 我要打出这一句话： There are a total of 3 doctors. 
+用|| 而不是+
+
+```sql
+SELECT 
+  'There are a total of ' || COUNT(*) || ' ' || LOWER(Occupation) || 's.'
+FROM OCCUPATIONS
+GROUP BY Occupation;
+```
 
 | 易错点                        | 正确方式                                        |   |     |   |                    |
 | -------------------------- | ------------------------------------------- | - | --- | - | ------------------ |
 | `AVERAGE()` 错写             | 应该是 `AVG()`                                 |   |     |   |                    |
 | `SUBSTITUTE()` 用错          | 应该是 `REPLACE()`                             |   |     |   |                    |
-| 拼接 SQL 输出句子                | 用 \`'... '                                  |   | col |   | '...'`或`CONCAT()\` |
+| 拼接 SQL 输出句子                | 用 concat(a,b) 或者 ||                                  |   | col |   | '...'`或`CONCAT()\` |
 | `CAST(... AS CHAR)` 有空格    | 加 `TRIM()` 处理                               |   |     |   |                    |
 | `COUNT(*)` vs `COUNT(col)` | `COUNT(*)` 会统计 NULL 行，`COUNT(col)` 不统计 NULL |   |     |   |                    |
 | SQL 函数参数顺序                 | 比如 `CEIL(错的AVG - 正确AVG)` 必须顺序正确，否则结果符号反了    |   |     |   |                    |
