@@ -287,6 +287,21 @@ ORDER BY LENGTH(CITY) DESC, CITY ASC
 FETCH FIRST 1 ROWS ONLY
 );
 '''
+窗口函数
+row_number() over(order by colname) 排序
+rank() 也是排序但是并列跳数
+count(*) over() 数行数
+'''sql
+WITH TB AS(
+    SELECT LAT_N,
+            ROW_NUMBER() OVER(ORDER BY LAT_N) AS RN,
+            COUNT(*) OVER() AS TOTAL_NUM
+    FROM STATION
+)
+SELECT CAST(AVG(LAT_N) AS DECIMAL(10,4))
+FROM TB
+WHERE RN IN ((TOTAL_NUM+1)/2,(TOTAL_NUM+2)/2);
+'''
 
 
 
